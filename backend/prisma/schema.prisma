@@ -93,7 +93,7 @@ model Payment {
 model Review {
   id        String   @id @default(uuid())
   review    String
-  rating    Int
+  rating    Float
   userId    String
   author    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   productId String

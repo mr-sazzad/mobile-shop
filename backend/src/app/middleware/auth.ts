@@ -3,7 +3,7 @@ import { Secret } from "jsonwebtoken";
 import ApiError from "../errors/apiError";
 import { jwtHelpers } from "../libs/jwtHelpers";
 
-const SECRET = process.env.JWT_SECRET || "e-commerce";
+const SECRET = process.env.SECRET || "hello12343";
 
 declare module "express-serve-static-core" {
   interface Request {
