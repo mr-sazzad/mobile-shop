@@ -14,90 +14,91 @@ datasource db {
 
 // Define the User model with various fields and relationships
 model User {
-  id         String     @id @default(uuid()) // Unique identifier for the user
-  name       String // User's name
-  image      String? // User's profile image URL (optional)
-  coverImage String? // User's cover image URL (optional)
-  address    String? // User's address (optional)
-  age        String? // User's age (optional)
-  bio        String? // User's biography (optional)
-  email      String     @unique // User's email (unique)
-  password   String // User's password
-  role       String // User's role
-  gender     Gender     @default(Male) // User's gender (default: Male)
-  phone      String? // User's phone number (optional)
-  createdAt  DateTime   @default(now()) // Creation timestamp
-  updatedAt  DateTime   @updatedAt // Last update timestamp
-  Cart       Cart[] // User's shopping cart items
-  Review     Review[] // User's product reviews
-  Wishlist   Wishlist[] // User's wishlist items
-  Payment    Payment[] // User's payment transactions
+  id         String     @id @default(uuid())
+  name       String
+  image      String?
+  coverImage String?
+  address    String?
+  age        String?
+  bio        String?
+  email      String     @unique
+  password   String
+  role       Role       @default(user)
+  isBanned   Boolean    @default(false)
+  gender     Gender     @default(Male)
+  phone      String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  Cart       Cart[]
+  Review     Review[]
+  Wishlist   Wishlist[]
+  Payment    Payment[]
 }
 
 // Define the Mobile model for mobile devices
 model Mobile {
-  id          String     @id @default(uuid()) // Unique identifier for the mobile device
-  imgae       String // Mobile device image URL
-  model       String // Mobile device model
-  brand       String // Mobile device brand
-  price       Int // Mobile device price
-  description String // Mobile device description
-  features    String[] // Mobile device features (array)
-  createdAt   DateTime   @default(now()) // Creation timestamp
-  updatedAt   DateTime   @updatedAt // Last update timestamp
-  Cart        Cart[] // Carts containing this mobile device
-  Review      Review[] // Reviews for this mobile device
-  Wishlist    Wishlist[] // Wishlists containing this mobile device
-  Payment     Payment[] // Payments for this mobile device
+  id          String     @id @default(uuid())
+  imgae       String
+  model       String
+  brand       String
+  price       Int
+  description String
+  features    String[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  Cart        Cart[]
+  Review      Review[]
+  Wishlist    Wishlist[]
+  Payment     Payment[]
 }
 
 // Define the Cart model representing user's shopping cart
 model Cart {
-  id        String   @id @default(uuid()) // Unique identifier for the cart item
-  userId    String // ID of the user who owns the cart
-  productId String // ID of the product in the cart
-  buyer     User     @relation(fields: [userId], references: [id], onDelete: Cascade) // User who owns the cart
-  product   Mobile   @relation(fields: [productId], references: [id]) // Product in the cart
-  createdAt DateTime @default(now()) // Creation timestamp
-  updatedAt DateTime @updatedAt // Last update timestamp
+  id        String   @id @default(uuid())
+  userId    String
+  productId String
+  buyer     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Mobile   @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Define the Wishlist model representing user's wishlist
 model Wishlist {
-  id        String   @id @default(uuid()) // Unique identifier for the wishlist item
-  userId    String // ID of the user who owns the wishlist
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade) // User who owns the wishlist
-  productId String // ID of the product in the wishlist
-  watch     Mobile   @relation(fields: [productId], references: [id], onDelete: Cascade) // Product in the wishlist
-  createdAt DateTime @default(now()) // Creation timestamp
-  updatedAt DateTime @updatedAt // Last update timestamp
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  watch     Mobile   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Define the Payment model representing user's payment transactions
 model Payment {
-  id        String        @id @default(uuid()) // Unique identifier for the payment transaction
-  status    PaymentStatus @default(Unpaid) // Payment status (default: Unpaid)
-  userId    String // ID of the user who made the payment
-  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade) // User who made the payment
-  productId String // ID of the product in the payment
-  product   Mobile        @relation(fields: [productId], references: [id], onDelete: Cascade) // Product in the payment
-  session   String // Payment session ID
-  cartId    String // ID of the cart associated with the payment
-  createdAt DateTime      @default(now()) // Creation timestamp
-  updatedAt DateTime      @updatedAt // Last update timestamp
+  id        String        @id @default(uuid())
+  status    PaymentStatus @default(Unpaid)
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Mobile        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  session   String
+  cartId    String
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 }
 
 // Define the Review model representing user's product reviews
 model Review {
-  id        String   @id @default(uuid()) // Unique identifier for the review
-  review    String // User's review content
-  rating    Int // User's rating for the product
-  userId    String // ID of the user who wrote the review
-  author    User     @relation(fields: [userId], references: [id], onDelete: Cascade) // User who wrote the review
-  productId String // ID of the product being reviewed
-  product   Mobile   @relation(fields: [productId], references: [id], onDelete: Cascade) // Product being reviewed
-  createdAt DateTime @default(now()) // Creation timestamp
-  updatedAt DateTime @updatedAt // Last update timestamp
+  id        String   @id @default(uuid())
+  review    String
+  rating    Int
+  userId    String
+  author    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Mobile   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Enum representing possible gender options
@@ -105,6 +106,13 @@ enum Gender {
   Male
   Female
   Other
+}
+
+// Enum representing possible user options
+enum Role {
+  user
+  seller
+  super_admin
 }
 
 // Enum representing possible payment status options

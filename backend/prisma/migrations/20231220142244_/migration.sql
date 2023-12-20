@@ -2,6 +2,9 @@
 CREATE TYPE "Gender" AS ENUM ('Male', 'Female', 'Other');
 
 -- CreateEnum
+CREATE TYPE "Role" AS ENUM ('user', 'seller', 'super_admin');
+
+-- CreateEnum
 CREATE TYPE "PaymentStatus" AS ENUM ('Unpaid', 'Paid');
 
 -- CreateTable
@@ -15,7 +18,8 @@ CREATE TABLE "User" (
     "bio" TEXT,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "role" TEXT NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'user',
+    "isBanned" BOOLEAN NOT NULL DEFAULT false,
     "gender" "Gender" NOT NULL DEFAULT 'Male',
     "phone" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
