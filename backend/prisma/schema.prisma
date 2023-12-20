@@ -57,6 +57,7 @@ model Cart {
   id        String   @id @default(uuid())
   userId    String
   productId String
+  quantity  Int      @default(1)
   buyer     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   product   Mobile   @relation(fields: [productId], references: [id])
   createdAt DateTime @default(now())
@@ -69,7 +70,7 @@ model Wishlist {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   productId String
-  watch     Mobile   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product   Mobile   @relation(fields: [productId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -79,7 +80,7 @@ model Payment {
   id        String        @id @default(uuid())
   status    PaymentStatus @default(Unpaid)
   userId    String
-  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  buyer     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   productId String
   product   Mobile        @relation(fields: [productId], references: [id], onDelete: Cascade)
   session   String
